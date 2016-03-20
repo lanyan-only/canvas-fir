@@ -1,0 +1,16 @@
+#canvas00{
+	
+
+}
+/* #canvas00{
+	position: absolute;
+	border:1px solid black;
+	top:500px;
+	display: block;
+} */
+
+#clock{
+	position: absolute;
+	top:0px;
+	right:0px;
+}

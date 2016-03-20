@@ -7,6 +7,7 @@ window.onload=function(){
     var qizi={};//所有的落子数据
     var kaiguan=localStorage.x?false:true;
     var huaqipan=function(){
+    	    ctx.clearRect(0,0,600,600);
 	    	ctx.strokeStyle="#030a56";
 	    	var y0=20.5;var x0=20.5;
 	    	for(i=0;i<row;i++){
@@ -108,15 +109,14 @@ ctx.fillRect(0,0,600,200);*/
 luozi(4,3,false);
 luozi(7,7,true);*/
 var qiziimg=document.querySelector("#sucai");
-var qiziimghei=document.querySelector("#sucaihei");
 
 var luozi=function(x,y,color){
 	var zx=40*x+5.5;
 	var zy=40*y+5.5;
 	if(color){
-		ctx.drawImage(qiziimg,zx,zy,36,36);
+		ctx.drawImage(qiziimg,2,2,56,56,zx,zy,36,36);
 	}else{
-		ctx.drawImage(qiziimghei,zx,zy,36,36);
+		ctx.drawImage(qiziimg,84,2,56,56,zx,zy,36,36);
 	}
 	
 }
@@ -128,6 +128,35 @@ canvas.onclick=function(e){
 
 	luozi(x,y,kaiguan);
 	qizi[x+'-'+y]=kaiguan?'black':'white';
+     if(kaiguan){
+     	if(panduan(x,y,'black')){
+     		alert("heiqiying");
+     		if(confirm('shifouzailaiyiju')){
+     			localStorage.clear();
+     			qizi={};
+                huaqipan();
+                kaiguan=true;
+                return;
+     		}
+     		else{
+     			canvas.onclick=null;
+     		}
+     	}
+     }else{
+     		if(panduan(x,y,'white')){
+     			alert("baiqiying");
+     			if(confirm('shifouzailaiyiju')){
+     				localStorage.clear();
+     				qizi={};
+     	           huaqipan();
+     	           kaiguan=true;
+     	           return;
+     			}else{
+     				canvas.onclick=null;
+     			}
+     		}
+     }
+
 	kaiguan=!kaiguan;
 
 	localStorage.data=JSON.stringify(qizi);
@@ -138,6 +167,70 @@ canvas.onclick=function(e){
 	}
 }
 
+var xy2id=function(x,y){
+	return x+'-'+y;
+}
+var panduan=function(x,y,color){
+	//color :  'heizi '   'baizi'  tx,tx游标 ;
+	var shuju=filter(color);
+	var tx,ty,hang=1;shu=1;zuoxie=1;youxie=1;
+	tx=x;ty=y;while(shuju[xy2id(tx-1,ty)]){tx--;hang++;};
+	tx=x;ty=y;while(shuju[xy2id(tx+1,ty)]){
+		tx++;
+		hang++;
+	};
+	if(hang>=5){
+		return true;
+	}
+	tx=x;ty=y;while(shuju[xy2id(tx,ty-1)]){
+		ty--;
+		shu++;
+	};
+	tx=x;ty=y;while(shuju[xy2id(tx,ty+1)]){
+		ty++;
+		shu++;
+	};
+	if(shu>=5){
+		return true;
+	}
+
+	tx=x;ty=y;while(shuju[xy2id(tx+1,ty-1)]){
+		tx++;
+		ty--;
+		zuoxie++;
+	};
+	tx=x;ty=y;while(shuju[xy2id(tx-1,ty+1)]){
+		tx--;
+		ty++;
+		zuoxie++;
+	};
+	if(zuoxie>=5){
+		return true;
+	}
+	tx=x;ty=y;while(shuju[xy2id(tx-1,ty-1)]){
+		tx--;
+		ty--;
+		youxie++;
+	};
+	tx=x;ty=y;while(shuju[xy2id(tx+1,ty+1)]){
+		tx++;
+		ty++;
+		youxie++;
+	};
+	if(youxie>=5){
+		return true;
+	}
+	
+}
+filter=function(color){
+	var r={};
+	for (var i in qizi){
+	    if(qizi[i]==color){
+	    	r[i]=qizi[i];
+	    }
+	}
+    return r;
+}
 
 /*var  qizi={};
 var kaiguan=true;
@@ -179,8 +272,56 @@ button.onclick=function(){
 	location.reload();
 }
 
+//悔棋
+button00.onclick=function(){
+	data=JSON.parse(localStorage.data);
+	if(JSON.stringify(data)==0){
+		button00.onclick=null;
+		return;
+	}
+	var xyqizi=[];
+	var colorqizi=[];
+	for(var i in data){
+		xyqizi.push(i);
+		colorqizi.push(data[i]);
+	}
+	xyqizi.pop();
+	colorqizi.pop();
+	for (var i = 0; i < colorqizi.length; i++) {
+		var x=xyqizi[i].split("_")[0];
+		var y=xyqizi[i].split("_")[1];
+		luozi(x,y,(colorqizi[i]=="black")?true:false);
+		if((colorqizi[i]=="black")?true:false){
+			localStorage.x=1;
+		}else{
+			localStorage.removeItem("x");
+		}
+	}
+	data={};
+	for (var i = 0; i < xyqizi.length; i++) {
+		var x=xyqizi[i].split("_")[0];
+		var y=xyqizi[i].split("_")[1];
+		data[x+"_"+y]=colorqizi[i];
+		if((colorqizi[i]=="black")?true:false){
+			localStorage.x=1;
+		}else{
+			localStorage.removeItem("x");
+		}
+	}
+	localStorage.data=JSON.stringify(data);
+	location.reload();
 
+}
 
+var bgimg=document.querySelector(".bg-img");
+var num=0;
+function move(){
+	num--;
+	if(num==-19860){num=0;}
+	bgimg.style.left=num+"px";
+}
+
+setInterval(move,20);
 
 
 

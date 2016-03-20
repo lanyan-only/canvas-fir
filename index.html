@@ -4,15 +4,27 @@
 	<meta charset="UTF-8">
 	<title>wuziqi</title>
 	<link rel="stylesheet" href="css/index.css">
+	<link rel="stylesheet" href="css/clock.css">
 	<script src="js/index.js"></script>
 </head>
-<body>
-	<img src="img/2.png" alt=""id="sucai"style="display:none">
-	<img src="img/未标题-1.png" alt=""id="sucaihei"style="display:none">
-	<canvas width="600"height="600"id="canvas00"></canvas>
+<body >
+<!-- 五子棋 -->
+<section class="bg-img"><img src="img/river.jpg" alt=""></section>
+<div id="wuzi">
+	<img src="img/1234.png" alt=""id="sucai"style="display:none">
+
 	<canvas width="600"height="600"id="canvas"></canvas>
 
 	<input type="button"value="重来"id="button">
 	<input type="button"value="悔棋" id="button00">
+</div>
+<!-- 五子棋结束 -->
+<!-- 钟表开始 -->
+	<div id="clock">
+		<audio src=""></audio>
+		<canvas width="300"height="300"id="canvas00"></canvas></div>
+	<!-- <canvas id="canvas00" width="1000"height="100"></canvas> -->
+<!-- 钟表结束 -->
 </body>
+<script src="js/clock.js"></script>
 </html>
